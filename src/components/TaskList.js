@@ -1,38 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Task from "./Task";
-import { useDrop } from "react-dnd";
 
-const taskType = "task";
-
-const TaskList = ({ tasks, onToggle, onDelete, onEdit, onReorder }) => {
-    const [localTasks, setLocalTasks] = useState(tasks);
-
-    useEffect(() => {
-        setLocalTasks(tasks);
-    }, [tasks]);
-
-    const moveTask = (draggedIndex, targetIndex) => {
-        const updatedTasks = [...localTasks];
-        const draggedTask = updatedTasks[draggedIndex];
-        updatedTasks.splice(draggedIndex, 1);
-        updatedTasks.splice(targetIndex, 0, draggedTask);
-        setLocalTasks(updatedTasks);
-        onReorder(updatedTasks);
-    };
-
-    const [{ isOver }, dropRef] = useDrop(() => ({
-        accept: taskType,
-        drop: (item, monitor) => {
-            const draggedIndex = item.index;
-            const targetIndex = localTasks.length - 1;
-            moveTask(draggedIndex, targetIndex);
-        },
-
-        collect: (monitor) => ({
-            isOver: monitor.isOver(),
-        }),
-    }));
-
+const TaskList = ({ tasks, onToggle, onDelete, onEdit, onDeleteChecked, onMoveUp, onMoveDown }) => {
     const [editingTaskId, setEditingTaskId] = useState(null);
 
     const handleEditButtonClick = (taskId) => {
@@ -44,11 +13,10 @@ const TaskList = ({ tasks, onToggle, onDelete, onEdit, onReorder }) => {
     };
 
     return (
-        <div ref={dropRef} style={{ backgroundColor: isOver ? "#e0e0e0" : "white" }}>
             <div>
-                {localTasks
+                {tasks
                 .filter((task) => task.id !== undefined)
-                .map((task, index) => (
+                .map((task) => (
                     <Task
                         key={task.id}
                         task={task}
@@ -57,12 +25,13 @@ const TaskList = ({ tasks, onToggle, onDelete, onEdit, onReorder }) => {
                         onEdit={onEdit}
                         isEditing={editingTaskId === task.id}
                         onEditButtonClick={handleEditButtonClick}
-                        moveTask={moveTask}
-                        index={index}></Task>
+                        onMoveUp={onMoveUp}
+                        onMoveDown={onMoveDown}
+                        
+                        ></Task>
                 ))}
+                <button onClick={onDeleteChecked}>Delete Checked Tasks</button>
             </div>
-        </div>
-
     );
 };
 

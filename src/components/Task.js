@@ -1,61 +1,8 @@
 import React, { useState } from "react";
-import { useDrag, useDrop } from "react-dnd";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const taskType = "task";
-
-const Task = ({ task, onToggle, onDelete, onEdit, isEditing, onEditButtonClick, moveTask, index }) => {
+const Task = ({ task, onToggle, onDelete, onEdit, isEditing, onEditButtonClick, onMoveUp, onMoveDown }) => {
     const [editedDescription, setEditedDescription] = useState(task.description);
-
-    const [{ isDragging }, dragRef] = useDrag(() => ({
-        type: taskType,
-        item: { id: task.id, index },
-        collect: (monitor) => ({
-            isDragging: monitor.isDragging(),
-        }),
-    }));
-
-    const [, dropRef] = useDrop(() => ({
-        accept: taskType,
-        hover: (item, monitor) => {
-            const draggedIndex = item.index;
-            const targetIndex = index;
-
-            if (draggedIndex === targetIndex) {
-                return;
-            }
-            if (!element) {
-                return;
-            }
-
-            if (!combinedRef) {
-                return;
-            }
-            console.log("XD1")
-            const hoverBoundingRect = element.getBoundingClientRect();
-            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-            const clientOffset = monitor.getClientOffset();
-            const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-            console.log("XD2")
-            if (draggedIndex < targetIndex && hoverClientY < hoverMiddleY) {
-                return;
-            }
-
-            if (draggedIndex > targetIndex && hoverClientY > hoverMiddleY) {
-                return;
-            }
-        },
-        drop: (item, monitor) => {
-            moveTask(item.index, index);
-        },
-    }));
-
-    const combinedRef = (element) => {
-        dragRef(element);
-        dropRef(element);
-        setElement(element);
-    };
-
-    const [element, setElement] = useState(null);
 
     const handleEditSubmit = (e) => {
         e.preventDefault();
@@ -74,25 +21,37 @@ const Task = ({ task, onToggle, onDelete, onEdit, isEditing, onEditButtonClick, 
     }
 
     return (
-        <div ref={combinedRef} style={{ opacity: isDragging ? 0.5 : 1 }}>
+        <div>
+            <div className="container">
+                <div className="row">
+                    <div className="col-6">
 
-            <div>
-                <input type="checkbox" checked={task.completed} onChange={() => onToggle(task.id)}></input>
-                {isEditing ? (
-                    <form onSubmit={handleEditSubmit}>
-                        <input type="text" value={editedDescription} onChange={(e) => setEditedDescription(e.target.value)}></input>
-                        <button type="submit">Save</button>
-                    </form>
-                ) : (
-                    <span style={{ textDecoration: task.completed ? "line-through" : "none" }}>
-                        {task.description}
-                    </span>
-                )}
-                {task.dueDate && <span>Due: {new Date(task.dueDate).toLocaleDateString()}</span>}
-                <button onClick={() => onEditButtonClick(task.id)}>Edit</button>
-                <button onClick={handleDelete}>Delete</button>
+                        <input type="checkbox" checked={task.completed} onChange={() => onToggle(task.id)}></input>
+                        {isEditing ? (
+                            <form onSubmit={handleEditSubmit}>
+                                <input type="text" value={editedDescription} onChange={(e) => setEditedDescription(e.target.value)}></input>
+                                <button type="submit">Save</button>
+                            </form>
+                        ) : (
+                            <span style={{ textDecoration: task.completed ? "line-through" : "none" }}>
+                                {task.description}
+                            </span>
+                        )}
+
+                    </div>
+                    <div className="col-3">
+                            {task.dueDate && <span>Due: {new Date(task.dueDate).toLocaleDateString()}</span>}
+                        </div>
+                    <div className="col-3 d-md-block">
+
+                        <button className="btn btn-warning" onClick={() => onEditButtonClick(task.id)}>Edit</button>
+                        <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
+                        <button className="btn btn-primary" onClick={() => onMoveUp(task.id)}>Up</button>
+                        <button className="btn btn-primary" onClick={() => onMoveDown(task.id)}>Down</button>
+
+                    </div>
+                </div>
             </div>
-
         </div>
     );
 };

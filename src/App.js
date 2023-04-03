@@ -1,13 +1,20 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import TaskInput from './components/TaskInput';
 import TaskList from './components/TaskList';
+import TaskInput from "./components/TaskInput";
+import TaskFilters from './components/TaskFilters';
 import { DndProvider } from 'react-dnd';
-import { v4 as uuidv4 } from 'uuid';
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { v4 as uuidv4 } from 'uuid';
 import './App.css';
 
 
+
 const App = () => {
+  const [sortOrder, setSortOrder] = useState('default');
+  const [filter, setFilter] = useState('all');
+  const [showModal, setShowModal] = useState(false);
+
+
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem("tasks");
     return savedTasks ? JSON.parse(savedTasks) : [];
@@ -49,9 +56,15 @@ const App = () => {
 
   };
 
-  const handleReorder = (newTasks) => {
-    setTasks(newTasks);
+  const deleteCheckedTasks = () => {
+    if (window.confirm("Are you sure to delete all tasks?")) {
+      setTasks(tasks.filter((task) => !task.completed));
+    }
   };
+
+  const deleteTask = (id) => {
+    setTasks(tasks.filter((task) => task.id !== id));
+  }
 
   const toggleTask = (id) => {
     setTasks(
@@ -61,10 +74,6 @@ const App = () => {
     );
   };
 
-  const deleteTask = (id) => {
-    setTasks(tasks.filter((task) => task.id !== id));
-  }
-
   const editTask = (id, newDescription) => {
     setTasks(
       tasks.map((task) =>
@@ -73,12 +82,75 @@ const App = () => {
     );
   };
 
+  const moveTaskUp = (id) => {
+    const taskIndex = tasks.findIndex((task) => task.id === id);
+    if (taskIndex > 0) {
+      const newTasks = [...tasks];
+      [newTasks[taskIndex - 1], newTasks[taskIndex]] = [newTasks[taskIndex], newTasks[taskIndex - 1]];
+      setTasks(newTasks);
+    }
+  }
+
+  const moveTaskDown = (id) => {
+    const taskIndex = tasks.findIndex((task) => task.id === id);
+    if (taskIndex < tasks.length - 1) {
+      const newTasks = [...tasks];
+      [newTasks[taskIndex + 1], newTasks[taskIndex]] = [newTasks[taskIndex], newTasks[taskIndex + 1]];
+      setTasks(newTasks);
+    }
+  };
+
+  const getSortedAndFilteredTasks = () => {
+    let filteredTasks = tasks;
+
+
+    if (filter === "completed") {
+      filteredTasks = tasks.filter((task) => task.completed);
+    } else if (filter === "notCompleted") {
+      filteredTasks = tasks.filter((task) => !task.completed);
+    }
+
+    let sortedTasks = [...filteredTasks];
+
+    if (sortOrder === "desc") {
+      sortedTasks.sort((a, b) => b.description.localeCompare(a.description));
+    } else if (sortOrder === "asc") {
+      sortedTasks.sort((a, b) => a.description.localeCompare(b.description));
+    } else if (sortOrder === "dateAsc") {
+      sortedTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+    } else if (sortOrder === "dateDesc") {
+      sortedTasks.sort((a, b) => new Date(b.dueDate) - new Date(a.dueDate));
+    }
+
+    return sortedTasks;
+  };
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+
+
+
   return (
-    <div className='App'>
-      <h1>Task List</h1>
-      <TaskInput onAdd={addTask}></TaskInput>
+    <div className='App container'>
+      <h1>Taskie</h1>
+      <button onClick={toggleModal}>New Task</button>
+      {showModal && <TaskInput onAdd={addTask} showModal={showModal} toggleModal={toggleModal}></TaskInput>}
+
+      <TaskFilters sortOrder={sortOrder} setSortOrder={setSortOrder} filter={filter} setFilter={setFilter}></TaskFilters>
+
       <DndProvider backend={HTML5Backend}>
-        <TaskList tasks={tasks} onToggle={toggleTask} onDelete={deleteTask} onEdit={editTask} onReorder={handleReorder}></TaskList>
+        <TaskList
+          tasks={getSortedAndFilteredTasks()}
+          onToggle={toggleTask}
+          onDelete={deleteTask}
+          onEdit={editTask}
+          onDeleteChecked={deleteCheckedTasks}
+          onMoveUp={moveTaskUp}
+          onMoveDown={moveTaskDown}
+
+        ></TaskList>
       </DndProvider>
     </div>
   );
