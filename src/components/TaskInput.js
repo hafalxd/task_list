@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './../App.css';
 
 const TaskInput = ({ onAdd, showModal, toggleModal }) => {
     const [description, setDescription] = useState("");

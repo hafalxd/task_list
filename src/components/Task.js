@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './../App.css';
 
 const Task = ({ task, onToggle, onDelete, onEdit, isEditing, onEditButtonClick, onMoveUp, onMoveDown }) => {
     const [editedDescription, setEditedDescription] = useState(task.description);
@@ -22,7 +23,7 @@ const Task = ({ task, onToggle, onDelete, onEdit, isEditing, onEditButtonClick, 
 
     return (
         <div>
-            <div className="container">
+            <div className="container taskoutline">
                 <div className="row">
                     <div className="col-6">
 
@@ -30,7 +31,7 @@ const Task = ({ task, onToggle, onDelete, onEdit, isEditing, onEditButtonClick, 
                         {isEditing ? (
                             <form onSubmit={handleEditSubmit}>
                                 <input type="text" value={editedDescription} onChange={(e) => setEditedDescription(e.target.value)}></input>
-                                <button type="submit">Save</button>
+                                <button className="btn btn-primary" type="submit">Save</button>
                             </form>
                         ) : (
                             <span style={{ textDecoration: task.completed ? "line-through" : "none" }}>

@@ -1,29 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
+import './../App.css';
 
-const TaskFilters = ({ sortOrder, setSortOrder, filter, setFilter }) => {
-  return (
-    <div>
-      <div>
-        <label>Sort by:</label>
-        <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
-          <option value="default">Order of addition</option>
-          <option value="asc">A-Z</option>
-          <option value="desc">Z-A</option>
-          <option value="dateAsc">Date Ascending</option>
-          <option value="dateDesc">Date Descending</option>
-        </select>
-      </div>
+const TaskFilters = ({ filter, setFilter }) => {
+    const [showSelect, setShowSelect] = useState(false);
 
-      <div>
-        <label>Filter by: </label>
-        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-          <option value="all">All</option>
-          <option value="completed">Completed</option>
-          <option value="notCompleted">Not Completed</option>
-        </select>
-      </div>
-    </div>
-  );
+    const toggleSelect = () => {
+        setShowSelect(!showSelect);
+    };
+
+    return (
+
+        <div>
+            <button className='btn btn-primary' onClick={toggleSelect}>
+                Filter
+            </button>
+            {showSelect && (
+                <div class="form-floating">
+                    <select className='form-select' id='floatingSelect' aria-label="Floating label select example" value={filter} onChange={(e) => setFilter(e.target.value)}>
+                        <option value="all">All</option>
+                        <option value="completed">Completed</option>
+                        <option value="notCompleted">Not Completed</option>
+                    </select>
+                    <label for="floatingSelect">Choose filter option</label>
+                </div>
+            )}
+        </div>
+    );
 };
 
 export default TaskFilters;

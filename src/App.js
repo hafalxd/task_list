@@ -2,18 +2,15 @@ import React, { useEffect, useState, useCallback } from 'react';
 import TaskList from './components/TaskList';
 import TaskInput from "./components/TaskInput";
 import TaskFilters from './components/TaskFilters';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { v4 as uuidv4 } from 'uuid';
 import './App.css';
-
+import TaskSorters from './components/TaskSorters';
 
 
 const App = () => {
   const [sortOrder, setSortOrder] = useState('default');
   const [filter, setFilter] = useState('all');
   const [showModal, setShowModal] = useState(false);
-
 
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem("tasks");
@@ -103,7 +100,6 @@ const App = () => {
   const getSortedAndFilteredTasks = () => {
     let filteredTasks = tasks;
 
-
     if (filter === "completed") {
       filteredTasks = tasks.filter((task) => task.completed);
     } else if (filter === "notCompleted") {
@@ -129,18 +125,18 @@ const App = () => {
     setShowModal(!showModal);
   };
 
-
-
-
   return (
     <div className='App container'>
       <h1>Taskie</h1>
-      <button onClick={toggleModal}>New Task</button>
-      {showModal && <TaskInput onAdd={addTask} showModal={showModal} toggleModal={toggleModal}></TaskInput>}
+      <div className='navbar1'>
+        <button className='btn btn-primary' onClick={toggleModal}>New Task</button>
+        {showModal && <TaskInput onAdd={addTask} showModal={showModal} toggleModal={toggleModal}></TaskInput>}
 
-      <TaskFilters sortOrder={sortOrder} setSortOrder={setSortOrder} filter={filter} setFilter={setFilter}></TaskFilters>
+        <TaskFilters filter={filter} setFilter={setFilter}></TaskFilters>
 
-      <DndProvider backend={HTML5Backend}>
+        <TaskSorters sortOrder={sortOrder} setSortOrder={setSortOrder}></TaskSorters>
+      </div>
+      <div className='tasklist'>
         <TaskList
           tasks={getSortedAndFilteredTasks()}
           onToggle={toggleTask}
@@ -149,9 +145,8 @@ const App = () => {
           onDeleteChecked={deleteCheckedTasks}
           onMoveUp={moveTaskUp}
           onMoveDown={moveTaskDown}
-
         ></TaskList>
-      </DndProvider>
+        </div>
     </div>
   );
 };

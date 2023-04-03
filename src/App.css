@@ -13,16 +13,8 @@ body {
 
 h1 {
   color: var(--primary-color);
-}
-
-button {
-  background-color: var(--blue);
-  color: white;
-  border: none;
-}
-
-button:hover {
-  background-color: var(--dark-blue);
+  text-align: center;
+  padding: 25px;
 }
 
 input[type="checkbox"]:checked + span {
@@ -53,4 +45,18 @@ form {
 
 .onTop {
   z-index: 1051 !important;
+}
+
+.navbar1 {
+  display: flex;
+  position: relative;
+  margin-bottom: 50px;
+}
+
+.tasklist {
+  padding-bottom: 25px;
+}
+
+.onetask {
+  margin-block: 12px;
 }
