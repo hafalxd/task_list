@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Task from "./Task";
+import TaskEditModal from './TaskEditModal';
 import './../App.css';
 
 const TaskList = ({ tasks, onToggle, onDelete, onEdit, onDeleteChecked, onMoveUp, onMoveDown }) => {
@@ -12,6 +13,8 @@ const TaskList = ({ tasks, onToggle, onDelete, onEdit, onDeleteChecked, onMoveUp
             setEditingTaskId(taskId);
         }
     };
+
+    const taskToEdit = tasks.find((task) => task.id === editingTaskId);
 
     return (
         <>
@@ -39,6 +42,16 @@ const TaskList = ({ tasks, onToggle, onDelete, onEdit, onDeleteChecked, onMoveUp
             <div>
                 <button className="btn btn-danger" onClick={onDeleteChecked}>Delete Checked Tasks</button>
             </div>
+
+            {editingTaskId && (
+                <TaskEditModal
+                    showModal={!!editingTaskId}
+                    toggleModal={() => setEditingTaskId(null)}
+                    editedTask={taskToEdit}
+                    onEdit={onEdit}
+
+                ></TaskEditModal>
+            )}
         </>
     );
 };

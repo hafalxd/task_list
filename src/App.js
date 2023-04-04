@@ -2,15 +2,21 @@ import React, { useEffect, useState, useCallback } from 'react';
 import TaskList from './components/TaskList';
 import TaskInput from "./components/TaskInput";
 import TaskFilters from './components/TaskFilters';
+import TaskEditModal from './components/TaskEditModal';
+import TaskSorters from './components/TaskSorters';
+
 import { v4 as uuidv4 } from 'uuid';
 import './App.css';
-import TaskSorters from './components/TaskSorters';
+
 
 
 const App = () => {
   const [sortOrder, setSortOrder] = useState('default');
   const [filter, setFilter] = useState('all');
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editedTask] = useState(null);
+  const [editingTaskId, setEditingTaskId] = useState(null);
 
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem("tasks");
@@ -125,6 +131,11 @@ const App = () => {
     setShowModal(!showModal);
   };
 
+  const handleEditButtonClick = (taskId) => {
+    setEditingTaskId(editingTaskId === taskId ? null : taskId);
+  }
+
+
   return (
     <div className='App container'>
       <h1>Taskie</h1>
@@ -145,8 +156,15 @@ const App = () => {
           onDeleteChecked={deleteCheckedTasks}
           onMoveUp={moveTaskUp}
           onMoveDown={moveTaskDown}
+          handleEditButtonClick={handleEditButtonClick}
         ></TaskList>
-        </div>
+        <TaskEditModal
+          showModal={showEditModal}
+          toggleModal={() => setShowEditModal(false)}
+          editedTask={editedTask}
+          onEdit={editTask}
+        ></TaskEditModal>
+      </div>
     </div>
   );
 };
