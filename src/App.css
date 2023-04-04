@@ -60,3 +60,75 @@ form {
 .onetask {
   margin-block: 12px;
 }
+
+.dark-mode {
+  background-color: #1f1f1f;
+  color: #cfcfcf;
+}
+
+.dark-mode .btn-primary {
+  background-color: #3a3a3a;
+  border-color: #3a3a3a;
+}
+
+.dark-mode .btn-secondary {
+  background-color: #3a3a3a;
+  border-color: #3a3a3a;
+}
+
+.dark-mode .btn-warning {
+  background-color: #3a3a3a;
+  border-color: #3a3a3a;
+}
+
+.dark-mode .btn-danger {
+  background-color: #3a3a3a;
+  border-color: #3a3a3a;
+}
+
+.dark-mode .modal-content {
+  background-color: #2b2b2b;
+  color: #cfcfcf;
+}
+
+.dark-mode .form-control {
+  background-color: #3a3a3a;
+  color: #cfcfcf;
+  border-color: #3a3a3a;
+}
+
+.dark-mode .form-control:focus {
+  background-color: #3a3a3a;
+  color: #cfcfcf;
+  border-color: #3a3a3a;
+  box-shadow: none;
+}
+
+.dark-mode .input-group-text {
+  background-color: #3a3a3a;
+  color: #cfcfcf;
+  border-color: #3a3a3a;
+}
+
+.dark-mode .input-group .form-control {
+  border-color: #3a3a3a;
+}
+
+.dark-mode .list-group-item {
+  background-color: #1f1f1f;
+  border-color: #3a3a3a;
+}
+
+.dark-mode .list-group-item-action {
+  color: #cfcfcf;
+}
+
+.dark-mode .list-group-item-action:hover {
+  color: #1f1f1f;
+  background-color: #3a3a3a;
+}
+
+.dark-mode .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: #3a3a3a;
+  border-color: #3a3a3a;
+}

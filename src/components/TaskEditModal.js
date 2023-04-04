@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-const TaskEditModal = ({ showModal, toggleModal, editedTask, onEdit, task }) => {
+const TaskEditModal = ({ showModal, toggleModal, editedTask, onEdit }) => {
     const [editedDescription, setEditedDescription] = useState('');
+    const [editedDueDate, setEditedDueDate] = useState('');
 
     useEffect(() => {
         if (editedTask) {
             setEditedDescription(editedTask.description);
+            setEditedDueDate(editedTask.dueDate ? new Date(editedTask.dueDate).toISOString().slice(0, 10) : '');
         }
     }, [editedTask]);
 
@@ -15,7 +17,7 @@ const TaskEditModal = ({ showModal, toggleModal, editedTask, onEdit, task }) => 
             if (editedDescription.trim() === "") {
                 alert("Don't leave an empty task!");
             } else {
-                onEdit(editedTask.id, editedDescription);
+                onEdit(editedTask.id, editedDescription, editedDueDate ? new Date(editedDueDate) : null);
                 toggleModal();
             }
         }
@@ -41,6 +43,18 @@ const TaskEditModal = ({ showModal, toggleModal, editedTask, onEdit, task }) => 
                                             value={editedDescription}
                                             onChange={(e) => setEditedDescription(e.target.value)}
                                             placeholder="Edit task"
+                                            className="form-control">
+
+                                        </input>
+
+                                    </div>
+                                    <div className="mb-3">
+                                        <label htmlFor="editedDueDate" className="form-label">Due Date</label>
+                                        <input
+                                            type="date"
+                                            id="editedDueDate"
+                                            value={editedDueDate}
+                                            onChange={(e) => setEditedDueDate(e.target.value)}
                                             className="form-control"
                                         />
                                     </div>

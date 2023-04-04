@@ -17,11 +17,16 @@ const App = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editedTask] = useState(null);
   const [editingTaskId, setEditingTaskId] = useState(null);
+  const [darkMode, setDarkMode] = useState(false);
 
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem("tasks");
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -77,12 +82,10 @@ const App = () => {
     );
   };
 
-  const editTask = (id, newDescription) => {
+  const editTask = (id, newDescription, newDueDate) => {
     setTasks(
       tasks.map((task) =>
-        task.id === id ? { ...task, description: newDescription } : task
-      )
-    );
+        task.id === id ? { ...task, description: newDescription, dueDate: newDueDate } : task));
   };
 
   const moveTaskUp = (id) => {
@@ -137,7 +140,7 @@ const App = () => {
 
 
   return (
-    <div className='App container'>
+    <div className={`App container${darkMode ? " dark-mode" : ""}`}>
       <h1>Taskie</h1>
       <div className='navbar1'>
         <button className='btn btn-primary' onClick={toggleModal}>New Task</button>
@@ -146,6 +149,11 @@ const App = () => {
         <TaskFilters filter={filter} setFilter={setFilter}></TaskFilters>
 
         <TaskSorters sortOrder={sortOrder} setSortOrder={setSortOrder}></TaskSorters>
+
+        <button className="btn btn-secondary" onClick={toggleDarkMode}>
+          {darkMode ? "Light Mode" : "Dark Mode"}
+        </button>
+
       </div>
       <div className='tasklist'>
         <TaskList

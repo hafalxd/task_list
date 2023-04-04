@@ -1,31 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Dropdown } from "react-bootstrap";
 import './../App.css';
 
 const TaskFilters = ({ filter, setFilter }) => {
-    const [showSelect, setShowSelect] = useState(false);
-
-    const toggleSelect = () => {
-        setShowSelect(!showSelect);
-    };
 
     return (
-
         <div>
-            <button className='btn btn-primary' onClick={toggleSelect}>
-                Filter
-            </button>
-            {showSelect && (
-                <div class="form-floating">
-                    <select className='form-select' id='floatingSelect' aria-label="Floating label select example" value={filter} onChange={(e) => setFilter(e.target.value)}>
-                        <option value="all">All</option>
-                        <option value="completed">Completed</option>
-                        <option value="notCompleted">Not Completed</option>
-                    </select>
-                    <label for="floatingSelect">Choose filter option</label>
-                </div>
-            )}
+          <Dropdown>
+            <Dropdown.Toggle variant="primary" id="dropdown-basic">
+              Filter
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={() => setFilter("all")}>All</Dropdown.Item>
+              <Dropdown.Item onClick={() => setFilter("completed")}>
+                Completed
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => setFilter("notCompleted")}>
+                Not Completed
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
-    );
+      );
 };
 
 export default TaskFilters;
