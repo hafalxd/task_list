@@ -1,3 +1,3 @@
-# Task List
+# Taskie
 
-Basing project using React.
+Basic project using React.
