@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Modal, Button, Form } from "react-bootstrap";
 
 const TaskEditModal = ({ showModal, toggleModal, editedTask, onEdit }) => {
     const [editedDescription, setEditedDescription] = useState('');
@@ -24,49 +25,35 @@ const TaskEditModal = ({ showModal, toggleModal, editedTask, onEdit }) => {
     };
 
     return (
-        <>
-            {showModal && (
-                <div className="modal show d-block" tabIndex="-1">
-                    <div className="modal-dialog">
-                        <div className="modal-content onTop">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Edit Task</h5>
-                                <button type="button" className="btn-close" onClick={toggleModal}></button>
-                            </div>
-                            <div className="modal-body">
-                                <form onSubmit={handleEditSubmit}>
-                                    <div className="mb-3">
-                                        <label htmlFor="editedDescription" className="form-label">Task Description</label>
-                                        <input
-                                            type="text"
-                                            id="editedDescription"
-                                            value={editedDescription}
-                                            onChange={(e) => setEditedDescription(e.target.value)}
-                                            placeholder="Edit task"
-                                            className="form-control">
-
-                                        </input>
-
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="editedDueDate" className="form-label">Due Date</label>
-                                        <input
-                                            type="date"
-                                            id="editedDueDate"
-                                            value={editedDueDate}
-                                            onChange={(e) => setEditedDueDate(e.target.value)}
-                                            className="form-control"
-                                        />
-                                    </div>
-                                    <button type="submit" className="btn btn-primary">Save Changes</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="modal-backdrop show" style={{ pointerEvents: 'none' }}></div>
-                </div>
-            )}
-        </>
+        <Modal show={showModal} onHide={toggleModal}>
+            <Modal.Header closeButton>
+                <Modal.Title>Edit Task</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form onSubmit={handleEditSubmit}>
+                    <Form.Group className="mb-3" controlId="editedDescription">
+                        <Form.Label>Task Description</Form.Label>
+                        <Form.Control
+                            type="text"
+                            value={editedDescription}
+                            onChange={(e) => setEditedDescription(e.target.value)}
+                            placeholder="Edit task"
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="editedDueDate">
+                        <Form.Label>Due Date</Form.Label>
+                        <Form.Control
+                            type="date"
+                            value={editedDueDate}
+                            onChange={(e) => setEditedDueDate(e.target.value)}
+                        />
+                    </Form.Group>
+                    <Button variant="primary" type="submit">
+                        Save Changes
+                    </Button>
+                </Form>
+            </Modal.Body>
+        </Modal>
     );
 };
 

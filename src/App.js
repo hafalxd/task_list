@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import TaskList from './components/TaskList';
 import TaskInput from "./components/TaskInput";
 import TaskFilters from './components/TaskFilters';
@@ -140,21 +141,21 @@ const App = () => {
 
 
   return (
-    <div className={`App container${darkMode ? " dark-mode" : ""}`}>
+    <Container className={`App${darkMode ? " dark-mode" : ""}`}>
       <h1>Taskie</h1>
-      <div className='navbar1'>
-        <button className='btn btn-primary' onClick={toggleModal}>New Task</button>
-        {showModal && <TaskInput onAdd={addTask} showModal={showModal} toggleModal={toggleModal}></TaskInput>}
-
-        <TaskFilters filter={filter} setFilter={setFilter}></TaskFilters>
-
-        <TaskSorters sortOrder={sortOrder} setSortOrder={setSortOrder}></TaskSorters>
-
-        <button className="btn btn-secondary" onClick={toggleDarkMode}>
-          {darkMode ? "Light Mode" : "Dark Mode"}
-        </button>
-
-      </div>
+      <Row className='navbar1 align-items-center'>
+        <Col xs={6} className='navbar2'>
+          <Button variant='primary' className='me-3' onClick={toggleModal}>New Task</Button>
+          {showModal && <TaskInput onAdd={addTask} showModal={showModal} toggleModal={toggleModal}></TaskInput>}
+          <TaskFilters filter={filter} setFilter={setFilter} className='ms-3 me-3'></TaskFilters>
+          <TaskSorters sortOrder={sortOrder} setSortOrder={setSortOrder} className='me-3'></TaskSorters>
+        </Col>
+        <Col xs={6} className='text-end'>
+          <Button variant="secondary" onClick={toggleDarkMode}>
+            {darkMode ? "Light Mode" : "Dark Mode"}
+          </Button>
+        </Col>
+      </Row>
       <div className='tasklist'>
         <TaskList
           tasks={getSortedAndFilteredTasks()}
@@ -165,15 +166,15 @@ const App = () => {
           onMoveUp={moveTaskUp}
           onMoveDown={moveTaskDown}
           handleEditButtonClick={handleEditButtonClick}
-        ></TaskList>
+        />
         <TaskEditModal
           showModal={showEditModal}
           toggleModal={() => setShowEditModal(false)}
           editedTask={editedTask}
           onEdit={editTask}
-        ></TaskEditModal>
+        />
       </div>
-    </div>
+    </Container>
   );
 };
 
